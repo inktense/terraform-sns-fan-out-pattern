@@ -27,12 +27,35 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Empty"
+      security:
+        - api_key: []
       x-amazon-apigateway-request-validator: "full"
+      x-amazon-apigateway-integration:
+        credentials: ${fan_out_api_role}
+        uri: ${oders_topic_uri}
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: "#set($inputRoot = $input.path('$'))\n{ }"
+            contentHandling: "CONVERT_TO_TEXT"
+        requestParameters:
+          integration.request.header.Content-Type: "'application/x-www-form-urlencoded'"
+        requestTemplates:
+          application/json: "Action=Publish&TopicArn=$util.urlEncode('${orders_topic}')&Message=$util.urlEncode($input.body)&MessageAttributes.entry.1.Name=shop&MessageAttributes.entry.1.Value.DataType=String&MessageAttributes.entry.1.Value.StringValue=$input.params('shop_id')&MessageAttributes.entry.2.Name=market&MessageAttributes.entry.2.Value.DataType=String&MessageAttributes.entry.2.Value.StringValue=$input.params('market')"
+        passthroughBehavior: "never"
+        httpMethod: "POST"
+        type: "aws"
 components:
   schemas:
     Empty:
       title: "Empty Schema"
       type: "object"
+  securitySchemes:
+    api_key:
+      type: "apiKey"
+      name: "x-api-key"
+      in: "header"
 x-amazon-apigateway-request-validators:
   full:
     validateRequestParameters: true
