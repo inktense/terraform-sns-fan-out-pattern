@@ -1,0 +1,39 @@
+openapi: "3.1.1"
+info:
+  title: "Fan Out Sample"
+  description: Sample API with direct integration to SNS
+  version: "0.0.1"
+paths:
+  /market/{market}/shops/{shop_id}/oders:
+    post:
+      parameters:
+        - in: path
+          name: market
+          description: The Market where the order should be processed
+          required: true
+          schema:
+            type: string
+            enum: [eu, us, ru]
+        - in: path
+          name: shop_id
+          required: true
+          schema:
+            type: string
+          description: The shop ID to whom the oder should be processed
+      responses:
+        200:
+          description: "200 response"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Empty"
+      x-amazon-apigateway-request-validator: "full"
+components:
+  schemas:
+    Empty:
+      title: "Empty Schema"
+      type: "object"
+x-amazon-apigateway-request-validators:
+  full:
+    validateRequestParameters: true
+    validateRequestBody: true
