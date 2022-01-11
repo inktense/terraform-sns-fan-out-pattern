@@ -1,3 +1,5 @@
+# API definition is provided trough an openapi template.
+# It includes responseTemplates and template mapping definitions.
 data "template_file" "openapi_api_definition" {
   template = file("./openapi.yaml")
 
