@@ -14,7 +14,7 @@ resource "aws_iam_role" "fan_out_role" {
 
 resource "aws_iam_role_policy_attachment" "fan_out_role_attachment" {
   role       = aws_iam_role.fan_out_role.name
-  policy_arn = "${aws_iam_policy.fan_out_policy.arn}"
+  policy_arn = aws_iam_policy.fan_out_policy.arn
 }
 
 data "aws_iam_policy_document" "sns_fan_out_inline_policy" {
