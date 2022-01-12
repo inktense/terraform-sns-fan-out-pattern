@@ -38,6 +38,10 @@ tf init
 tf plan 
 tf apply
 ```
+In order to tear down the entire infrastructure use 
+```
+tf destroy
+```
 
 ---------------------------------------------------------------
 ## Usefull information
